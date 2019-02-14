@@ -13,6 +13,7 @@ import com.mofe.database.AppDatabase
 import com.mofe.database.entities.Items
 import com.mofe.utils.SharedprefManager
 import com.mofe.utils.SharedprefManager.amount
+import com.mofe.utils.SharedprefManager.init_amount
 import com.mofe.utils.getCurrentDateTime
 import com.mofe.utils.toString
 import kotlinx.android.synthetic.main.activity_add_item.*
@@ -85,9 +86,9 @@ class addItem_activity : AppCompatActivity() {
 
             val Prefs = SharedprefManager.customPreference(this, CUSTOM_PREF_NAME);
 
-            if(Prefs.amount > inputItemCost.toInt()){
+            if(Prefs.init_amount > inputItemCost.toInt() || Prefs.amount == 0){
 
-                Prefs.amount = Prefs.amount - inputItemCost.toInt()
+                Prefs.amount = Prefs.init_amount - inputItemCost.toInt()
 
                 saveItemMofetoDB(itemname = inputItem,
                         itemcate = pickedCategoryItem,
@@ -144,6 +145,7 @@ class addItem_activity : AppCompatActivity() {
 
         } else {
 
+            startActivity(Intent(mActivity, home_activity::class.java))
             finish()
         }
 

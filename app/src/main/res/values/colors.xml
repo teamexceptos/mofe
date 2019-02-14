@@ -3,6 +3,8 @@
     <color name="colorPrimary">#3f51b5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#979add</color>
+    <color name="colorWhite">#ffffff</color>
+    <color name="lime_progress_100">#aeb941</color>
 
     <array name="random_color">
         <item name="red_400" type="color">#e84e40</item>

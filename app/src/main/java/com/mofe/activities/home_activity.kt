@@ -1,10 +1,12 @@
 package com.mofe.activities
 
 import android.annotation.SuppressLint
+import android.annotation.TargetApi
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
@@ -22,6 +24,7 @@ import com.mofe.utils.NumberAmountFormat
 import com.mofe.utils.RecyclerItemClickListener
 import com.mofe.utils.SharedprefManager.amount
 import com.mofe.utils.SharedprefManager.customPreference
+import com.mofe.utils.SharedprefManager.init_amount
 import com.mofe.utils.SharedprefManager.lastdate
 import com.mofe.utils.getCurrentDateTime
 import com.mofe.utils.toString
@@ -79,16 +82,10 @@ class home_activity : AppCompatActivity() {
         val date = getCurrentDateTime()
         val datetoString = date.toString("EEE, d MMM yyyy")
         Prefs.lastdate = datetoString
+        last_date_update.setText(datetoString)
 
-        if(amt_input.text.toString().equals("update amount") && Prefs.amount == 0 ){
-
-            last_date_update.setText(datetoString)
-
-        } else {
-
-            last_date_update.setText(datetoString)
-            amt_input.setText(NumberAmountFormat(Prefs.amount))
-        }
+        amt_reduction.setText(NumberAmountFormat(Prefs.amount))
+        init_amt_input.setText(NumberAmountFormat(Prefs.init_amount))
 
         edit_amt.setOnClickListener {
             dialogUpdate(this);
@@ -97,6 +94,15 @@ class home_activity : AppCompatActivity() {
         add_item_toget_fab.setOnClickListener {
             startActivity(Intent(mActivity, addItem_activity::class.java))
             finish()
+        }
+
+        cp_bar.run {
+            setRounded(true)
+            setMaxProgress(80F)
+            setProgressColor(context.getColor(R.color.lime_progress_100))
+            setProgressBackgroundColor(context.getColor(R.color.colorWhite))
+            setProgressWidth(16.0F)
+            setProgress(20.0F)
         }
     }
 
@@ -110,7 +116,7 @@ class home_activity : AppCompatActivity() {
         rvMofe.addOnItemTouchListener(RecyclerItemClickListener(baseContext, rvMofe, object : RecyclerItemClickListener.OnItemClickListener {
 
                     override fun onItemClick(view: View, position: Int) {
-                        OpenItemDialog(context, mArrayList[position])
+                        OpenItemDialog(context, mArrayList[position], position)
                     }
 
                     override fun onLongItemClick(view: View, position: Int) {
@@ -120,7 +126,8 @@ class home_activity : AppCompatActivity() {
         )
     }
 
-    fun OpenItemDialog(context: Context, items: Items){
+    @TargetApi(Build.VERSION_CODES.M)
+    fun OpenItemDialog(context: Context, items: Items, position: Int){
 
         val wmLayoutParams = window.attributes
         wmLayoutParams.gravity = Gravity.CENTER_HORIZONTAL
@@ -133,13 +140,22 @@ class home_activity : AppCompatActivity() {
         val delete_item = dialog.delete_item
         val mofe_view_item = dialog.picked_mofe
 
-        mofe_view_item.setTextColor(R.color.colorPrimary)
+        mofe_view_item.setTextColor(context.getColor(R.color.colorAccent))
         mofe_view_item.setText(items.itemName)
 
+        checked_gotten.setOnClickListener {
 
-        checked_gotten.setOnClickListener {  }
-        edit_price.setOnClickListener {  }
-        delete_item.setOnClickListener {  }
+        }
+
+        edit_price.setOnClickListener {
+            AppDatabase.getInstance(this@home_activity).ItemsDao().update(300, position)
+            toast("Clicking")
+
+        }
+
+        delete_item.setOnClickListener {
+
+        }
 
         dialog.setCanceledOnTouchOutside(true)
         dialog.show()
@@ -178,16 +194,18 @@ class home_activity : AppCompatActivity() {
 
                 if(amt_update != ""){
 
-                    if(amt_input.text.toString() != "update amount"){
+                    if(init_amt_input.text.toString() != "update amount"){
+
                         val new_update = Prefs.amount + amt_update.toInt()
-                        amt_input.setText(NumberAmountFormat(new_update))
+                        init_amt_input.setText(NumberAmountFormat(new_update))
                         Prefs.amount = new_update
+                        Prefs.init_amount = new_update
                     }
 
                     else {
 
-                        amt_input.setText(NumberAmountFormat(amt_update.toInt()))
-                        Prefs.amount = amt_update.toInt()
+                        init_amt_input.setText(NumberAmountFormat(amt_update.toInt()))
+                        Prefs.init_amount = amt_update.toInt()
                     }
 
                     alertDialog.dismiss()

@@ -10,6 +10,7 @@ import android.content.SharedPreferences
 object SharedprefManager {
 
     val AMOUNT = "AMOUNT"
+    val INIT_AMOUNT = "INIT_AMOUNT"
     val LASTDATE = "LAST_DATE"
 
     fun customPreference(context: Context, name: String):
@@ -39,6 +40,14 @@ object SharedprefManager {
         set(value) {
             editMe {
                 it.putInt(AMOUNT, value)
+            }
+        }
+
+    var SharedPreferences.init_amount
+        get() = getInt(INIT_AMOUNT, 0)
+        set(value) {
+            editMe {
+                it.putInt(INIT_AMOUNT, value)
             }
         }
 
