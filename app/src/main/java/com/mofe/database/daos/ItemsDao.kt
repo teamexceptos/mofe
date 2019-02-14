@@ -19,8 +19,11 @@ interface ItemsDao {
     @Query("SELECT * FROM items WHERE uid IN (:itemsIds)")
     fun loadAllByIds(itemsIds: Array<Int>): List<Items>
 
-    @Query("SELECT * FROM items WHERE item_name = :uid")
-    fun findByItemId(uid: Int): List<Items>
+    @Query("SELECT * FROM items WHERE item_name = :item_name")
+    fun findByItemId(item_name: String): List<Items>
+
+    @Query("UPDATE items SET item_price = :item_amount WHERE uid =:itemsId")
+    fun update(item_amount: Int?, itemsId: Int)
 
     @Insert
     fun insertAll(items: List<Items>)
