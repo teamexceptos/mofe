@@ -2,6 +2,7 @@ package com.mofe.activities
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
@@ -24,6 +26,7 @@ import com.mofe.utils.SharedprefManager.lastdate
 import com.mofe.utils.getCurrentDateTime
 import com.mofe.utils.toString
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.item_click_option_view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
@@ -37,6 +40,7 @@ class home_activity : AppCompatActivity() {
     val CUSTOM_PREF_NAME = "amount_data"
     val mActivity: Activity = this@home_activity
     private var mAdapter: ItemsAdapter? = null
+    val context: Context = this
 
     lateinit var rvMofe: RecyclerView
     var mArrayList: ArrayList<Items> = ArrayList()
@@ -100,13 +104,13 @@ class home_activity : AppCompatActivity() {
 
         rvMofe = mofe_rv
         rvMofe.setHasFixedSize(true)
-        rvMofe.layoutManager = LinearLayoutManager(view.context)
+        rvMofe.layoutManager = LinearLayoutManager(this)
         rvMofe.adapter = mAdapter
 
         rvMofe.addOnItemTouchListener(RecyclerItemClickListener(baseContext, rvMofe, object : RecyclerItemClickListener.OnItemClickListener {
 
                     override fun onItemClick(view: View, position: Int) {
-
+                        OpenItemDialog(context, mArrayList[position])
                     }
 
                     override fun onLongItemClick(view: View, position: Int) {
@@ -114,6 +118,30 @@ class home_activity : AppCompatActivity() {
                     }
                 })
         )
+    }
+
+    fun OpenItemDialog(context: Context, items: Items){
+
+        val wmLayoutParams = window.attributes
+        wmLayoutParams.gravity = Gravity.CENTER_HORIZONTAL
+        window.attributes = wmLayoutParams
+        val dialog = Dialog(context)
+        dialog.setContentView(R.layout.item_click_option_view)
+
+        val checked_gotten = dialog.checked_gotten
+        val edit_price = dialog.edit_price
+        val delete_item = dialog.delete_item
+        val mofe_view_item = dialog.picked_mofe
+
+        mofe_view_item.setText(items.itemName)
+
+        checked_gotten.setOnClickListener {  }
+        edit_price.setOnClickListener {  }
+        delete_item.setOnClickListener {  }
+
+        dialog.setCanceledOnTouchOutside(true)
+        dialog.show()
+
     }
 
     /**

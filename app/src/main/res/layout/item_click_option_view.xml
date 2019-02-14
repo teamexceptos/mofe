@@ -1,19 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="25dp"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/picked_mofe"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="19dp"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="20sp" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="right"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@android:color/black" />
+
+    <LinearLayout
+        android:id="@+id/checked_gotten"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="19dp"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:padding="7dp"
             app:srcCompat="@drawable/ic_check_black_24dp" />
@@ -23,7 +45,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginLeft="19dp"
             android:layout_weight="1"
+            android:padding="5dp"
             android:text="Gotten"
             android:textColor="@android:color/black"
             android:textSize="16sp" />
@@ -31,14 +55,17 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/edit_price"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="19dp"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/imageView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:padding="7dp"
             app:srcCompat="@drawable/ic_edit_black_foritem_24dp" />
@@ -48,21 +75,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginLeft="19dp"
             android:layout_weight="1"
+            android:padding="5dp"
             android:text="Edit Price"
             android:textColor="@android:color/black"
             android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/delete_item"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="19dp"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/imageView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:padding="7dp"
             app:srcCompat="@drawable/ic_delete_black_24dp" />
@@ -72,7 +104,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginLeft="19dp"
             android:layout_weight="1"
+            android:padding="5dp"
             android:text="Delete"
             android:textColor="@android:color/black"
             android:textSize="16sp" />
