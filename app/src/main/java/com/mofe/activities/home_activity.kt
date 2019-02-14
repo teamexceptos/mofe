@@ -133,7 +133,9 @@ class home_activity : AppCompatActivity() {
         val delete_item = dialog.delete_item
         val mofe_view_item = dialog.picked_mofe
 
+        mofe_view_item.setTextColor(R.color.colorPrimary)
         mofe_view_item.setText(items.itemName)
+
 
         checked_gotten.setOnClickListener {  }
         edit_price.setOnClickListener {  }
