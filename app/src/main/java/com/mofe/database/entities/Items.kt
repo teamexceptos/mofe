@@ -5,15 +5,19 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 
 @Entity
-class Items constructor(itemName: String,
-                        itemPrice: Int,
-                        itemCate: String,
-                        itemImg: String,
-                        itemDateAdded: String,
-                        itemDueDate: String) {
+class Items constructor(itemUid: Int = 0,
+                        itemName: String = "",
+                        itemPrice: Int = 0,
+                        itemCate: String = "",
+                        itemImg: String = "",
+                        itemDateAdded: String = "",
+                        itemLongDateAdded: Long = 0,
+                        itemDueDate: String = "",
+                        itemisGotten: String = "") {
 
-    @PrimaryKey(autoGenerate = true)
-    var uid: Int = 0
+    @PrimaryKey
+    @ColumnInfo(name="item_uid")
+    var itemUid: Int = itemUid
 
     @ColumnInfo(name = "item_name")
     var itemName: String? = itemName
@@ -30,7 +34,14 @@ class Items constructor(itemName: String,
     @ColumnInfo(name = "item_date_added")
     var itemDateAdded: String? = itemDateAdded
 
+    @ColumnInfo(name = "item_long_date_added")
+    var itemLongDateAdded: Long? = itemLongDateAdded
+
     @ColumnInfo(name = "item_due_date")
     var itemDueDate: String? = itemDueDate
+
+    @ColumnInfo(name = "item_is_gotten")
+    var itemGotten: String? = itemisGotten
+
 
 }
