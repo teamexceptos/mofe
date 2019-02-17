@@ -1,10 +1,8 @@
 package com.mofe.database.daos
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Delete
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 import com.mofe.database.entities.Items
+
 
 /**
  * Created by ${cosmic} on 2/10/19.
@@ -16,14 +14,14 @@ interface ItemsDao {
     @get:Query("SELECT * FROM items")
     val all: List<Items>
 
-    @Query("SELECT * FROM items WHERE uid IN (:itemsIds)")
-    fun loadAllByIds(itemsIds: Array<Int>): List<Items>
+    @Query("SELECT * FROM items WHERE item_is_gotten = :itemisGotten")
+    fun loadAllByGotten(itemisGotten: String): List<Items>
 
-    @Query("SELECT * FROM items WHERE item_name = :item_name")
-    fun findByItemId(item_name: String): List<Items>
+    @Query("SELECT * FROM items WHERE item_uid = :itemID")
+    fun findItemById(itemID: Int) : Items?
 
-    @Query("UPDATE items SET item_price = :item_amount WHERE uid =:itemsId")
-    fun update(item_amount: Int?, itemsId: Int)
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    fun update(items: Items)
 
     @Insert
     fun insertAll(items: List<Items>)

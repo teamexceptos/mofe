@@ -1,6 +1,7 @@
 package com.mofe.utils
 
 import android.annotation.SuppressLint
+import com.mofe.database.entities.Items
 import java.text.NumberFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -53,7 +54,6 @@ fun getFormatTime(inputTime: String): String {
     return outputTime
 }
 
-
 /**
  * Convert formatted Number
  * */
@@ -77,11 +77,14 @@ fun getCurrentDateTime(): Date {
     return Calendar.getInstance().time
 }
 
-//fun sortingforItmes(list: List<Items>){
-//
-//    Collections.sort<Items>(list, object : Comparator<Items> {
-//        override fun compare(lhs: Items, rhs: Items): Int {
-//            return java.lang.Long.compare(rhs., lhs.)
-//        }
-//    })
-//}
+/**
+ * Sorting item list with time long
+ * */
+fun sortingforItmes(list: List<Items>){
+
+    Collections.sort<Items>(list, object : Comparator<Items> {
+        override fun compare(lhs: Items, rhs: Items): Int {
+            return java.lang.Long.compare(rhs.itemLongDateAdded!!, lhs.itemLongDateAdded!!)
+        }
+    })
+}
