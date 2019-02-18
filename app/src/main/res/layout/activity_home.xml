@@ -23,7 +23,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:paddingTop="4dp"
+                android:layout_marginTop="7dp"
+                android:textStyle="bold"
                 android:textAlignment="center"
                 android:textColor="@android:color/white"
                 android:textSize="14sp" />
@@ -33,7 +34,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:padding="5dp"
+                android:padding="4dp"
+                android:layout_marginRight="4dp"
                 app:srcCompat="@drawable/ic_edit_black_24dp" />
 
             <com.mofe.utils.CircularProgressBar
@@ -98,7 +100,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
-                        android:text="reduction"
+                        android:text="Reduction"
                         android:textAlignment="center"
                         android:textColor="@android:color/holo_blue_bright" />
 
@@ -155,6 +157,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="No wants added yet"
+            android:textColor="@color/colorAccent"
             android:textSize="23sp" />
     </RelativeLayout>
 

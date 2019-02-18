@@ -35,6 +35,7 @@ class CateAdapter(private val mContext: Context, private val mData: MutableList<
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+
         var view = convertView
         val viewHolder: ViewHolder
         if (view != null) {

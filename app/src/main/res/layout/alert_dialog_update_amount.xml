@@ -14,7 +14,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:text="Update Amount"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorAccent"
         android:textSize="18dp" />
 
     <EditText
@@ -25,7 +25,6 @@
         android:layout_marginRight="5dp"
         android:layout_marginTop="10dp"
         android:hint="Enter Amount"
-        android:backgroundTint="@color/colorPrimary"
         android:inputType="number"
         android:paddingLeft="5dp">
 

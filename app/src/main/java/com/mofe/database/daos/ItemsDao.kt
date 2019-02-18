@@ -18,7 +18,7 @@ interface ItemsDao {
     fun loadAllByGotten(itemisGotten: String): List<Items>
 
     @Query("SELECT * FROM items WHERE item_uid = :itemID")
-    fun findItemById(itemID: Int) : Items?
+    fun findItemById(itemID: Int): List<Items>
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun update(items: Items)

@@ -5,7 +5,7 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 
 @Entity
-class Items constructor(itemUid: Int = 0,
+class Items constructor(@PrimaryKey @ColumnInfo(name = "item_uid") var itemUid: Int = 0,
                         itemName: String = "",
                         itemPrice: Int = 0,
                         itemCate: String = "",
@@ -14,10 +14,6 @@ class Items constructor(itemUid: Int = 0,
                         itemLongDateAdded: Long = 0,
                         itemDueDate: String = "",
                         itemisGotten: String = "") {
-
-    @PrimaryKey
-    @ColumnInfo(name="item_uid")
-    var itemUid: Int = itemUid
 
     @ColumnInfo(name = "item_name")
     var itemName: String? = itemName

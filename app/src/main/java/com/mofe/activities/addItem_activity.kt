@@ -5,17 +5,17 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.mofe.R
+import com.mofe.adapters.ItemsAdapter
 import com.mofe.database.AppDatabase
 import com.mofe.database.entities.Items
-import com.mofe.utils.SharedprefManager
+import com.mofe.utils.*
 import com.mofe.utils.SharedprefManager.amount
 import com.mofe.utils.SharedprefManager.init_amount
-import com.mofe.utils.getCurrentDateTime
-import com.mofe.utils.toString
 import kotlinx.android.synthetic.main.activity_add_item.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.selector
@@ -28,31 +28,35 @@ import java.util.*
  * Created by ${cosmic} on 2/10/19.
  */
 
-class addItem_activity : AppCompatActivity() {
+class addItem_activity : home_activity() {
 
-    val mActivity: Activity = this@addItem_activity
+    override val mActivity: Activity = this@addItem_activity
 
     lateinit var dateSetListener: DatePickerDialog.OnDateSetListener
     lateinit var myCalendar: Calendar
 
-    val CUSTOM_PREF_NAME = "amount_data"
+    override val CUSTOM_PREF_NAME = "amount_data"
+    private var mAdapter: ItemsAdapter? = null
 
     private var inputDate = ""
     private var inputItem = ""
     private var inputItemCost = ""
     private var pickedCategoryItem = ""
+    lateinit var all_items: List<Items>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        noStatusBar()
+
         setContentView(R.layout.activity_add_item)
 
         setSupportActionBar(toolbarAddTask)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setDisplayShowHomeEnabled(true)
 
         addtoCate.setOnClickListener {
+
             doAsync {
+
                 val Catedatabase = AppDatabase.getInstance(context = this@addItem_activity).CateDao().all
 
                 val cnames: MutableList<CharSequence> = arrayListOf()
@@ -68,9 +72,88 @@ class addItem_activity : AppCompatActivity() {
             }
         }
 
+        expandings()
+
+        doAsync {
+
+            val database = AppDatabase.getInstance(context = this@addItem_activity)
+            val itemGotten = database.ItemsDao().loadAllByGotten("yes")
+
+            all_items = database.ItemsDao().all
+
+            sortingforItmes(itemGotten)
+
+            mArrayList = itemGotten as ArrayList<Items>
+
+            uiThread {
+                if(mArrayList.size == 0) {
+
+                    gotten_mofe_items_rv.visibility = View.GONE
+
+                } else {
+
+                    gotten_mofe_items_rv.visibility = View.VISIBLE
+                    mAdapter = ItemsAdapter(this@addItem_activity, mArrayList,this@addItem_activity, true)
+                    initializeMofeGottenrv()
+
+                }
+            }
+        }
+
         edtSetDate.setOnClickListener {
             dateAndTime()
             setDate()
+        }
+
+        item_mofe_to_add.setOnClickListener {
+            addItems()
+        }
+    }
+
+    private fun initializeMofeGottenrv() {
+
+        rvMofe = gotten_mofe_items_rv
+        rvMofe.visibility = View.VISIBLE
+        rvMofe.setHasFixedSize(true)
+        rvMofe.layoutManager = LinearLayoutManager(this)
+        rvMofe.adapter = mAdapter
+
+        rvMofe.addOnItemTouchListener(RecyclerItemClickListener(baseContext, rvMofe, object : RecyclerItemClickListener.OnItemClickListener {
+
+                    override fun onItemClick(view: View, position: Int) {
+
+                        val holder: ItemsAdapter.ViewHolder = ItemsAdapter.ViewHolder(view)
+
+                        if (holder.optionsItemClick.visibility == View.GONE) {
+
+                            holder.optionsItemClick.visibility = View.VISIBLE
+
+                        } else {
+
+                            holder.optionsItemClick.visibility = View.GONE
+                        }
+                    }
+
+                    override fun onLongItemClick(view: View, position: Int) {
+
+                    }
+                })
+        )
+
+    }
+
+    private fun expandings(){
+
+        expand_input_layout.setOnClickListener {
+
+            if(mofe_input_layout.visibility == View.VISIBLE){
+                mofe_input_layout.visibility = View.GONE
+                expand_input_layout.setImageDrawable(mActivity.getDrawable(R.drawable.ic_expand_more_black_24dp))
+
+            } else {
+                mofe_input_layout.visibility = View.VISIBLE
+                expand_input_layout.setImageDrawable(mActivity.getDrawable(R.drawable.ic_expand_less_black_24dp))
+            }
         }
     }
 
@@ -83,36 +166,66 @@ class addItem_activity : AppCompatActivity() {
 
             val date = getCurrentDateTime()
             val datetoString = date.toString("EEE, d MMM yyyy")
-
             val Prefs = SharedprefManager.customPreference(this, CUSTOM_PREF_NAME);
 
-            if(Prefs.init_amount > inputItemCost.toInt() || Prefs.amount == 0){
+            if(Prefs.init_amount > inputItemCost.toInt()){
 
-                Prefs.amount = Prefs.init_amount - inputItemCost.toInt()
+                if(Prefs.amount < inputItemCost.toInt() && Prefs.amount != 0) {
 
-                saveItemMofetoDB(itemname = inputItem,
-                        itemcate = pickedCategoryItem,
-                        itemcost = inputItemCost.toInt(),
-                        itemimg = "",
-                        itemduedate = inputDate,
-                        itemdateadded = datetoString);
+                    toast("Running on low buget")
+
+                } else {
+
+                    if(Prefs.amount == 0) {
+
+                        Prefs.amount = Prefs.init_amount - inputItemCost.toInt()
+
+                    } else {
+
+                        Prefs.amount = Prefs.amount - inputItemCost.toInt()
+                    }
+
+                    saveItemMofetoDB(itemuid = all_items.size + 1,
+                            itemname = inputItem,
+                            itemcate = pickedCategoryItem,
+                            itemcost = inputItemCost.toInt(),
+                            itemimg = "",
+                            itemduedate = inputDate,
+                            itemdateadded = datetoString,
+                            itemLongDateAdded = date.time,
+                            itemisgotten = "no");
+
+                }
 
                 startActivity(Intent(mActivity, home_activity::class.java))
                 finish()
 
             } else {
-                toast("So sad, you have low buget on you right now")
+
+                toast("Set initial amount to spend or Try to delete some wants to spend")
             }
 
         } else {
 
-            toast("Some of your inputs are empty")
+            toast("Make all inputs")
         }
     }
 
-    private fun saveItemMofetoDB(itemname: String, itemcost: Int, itemcate: String, itemimg: String, itemduedate: String, itemdateadded: String) {
+    private fun saveItemMofetoDB(itemuid: Int, itemname: String, itemcost: Int, itemcate: String, itemimg: String, itemduedate: String, itemdateadded: String,
+                                 itemLongDateAdded: Long,
+                                 itemisgotten: String) {
+
         doAsync {
-            val item = Items(itemName = itemname, itemCate = itemcate, itemPrice = itemcost, itemImg = itemimg, itemDueDate = itemduedate, itemDateAdded = itemdateadded)
+            val item = Items(itemUid = itemuid,
+                    itemName = itemname,
+                    itemCate = itemcate,
+                    itemPrice = itemcost,
+                    itemImg = itemimg,
+                    itemDueDate = itemduedate,
+                    itemDateAdded = itemdateadded,
+                    itemLongDateAdded = itemLongDateAdded,
+                    itemisGotten = itemisgotten)
+
             AppDatabase.getInstance(this@addItem_activity).ItemsDao().insert(item)
         }
     }
@@ -140,7 +253,6 @@ class addItem_activity : AppCompatActivity() {
             }
 
             val alert: AlertDialog = alertDialog.create()
-
             alert.show()
 
         } else {
@@ -188,18 +300,19 @@ class addItem_activity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_add_item, menu)
+        menuInflater.inflate(R.menu.menu_additem_options, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         val id = item!!.itemId
-        when (id) {
-            R.id.action_done -> {
-                addItems()
-            }
-        }
+//        when (id) {
+//            R.id.action_done -> {
+//                addItems()
+//            }
+//        }
 
         return super.onOptionsItemSelected(item)
     }
+
 }

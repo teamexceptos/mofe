@@ -36,7 +36,7 @@ abstract class AppDatabase : RoomDatabase() {
         fun getInstance(context: Context): AppDatabase {
             if (sInstance == null) {
                 sInstance = Room
-                        .databaseBuilder(context.applicationContext, AppDatabase::class.java, "toget")
+                        .databaseBuilder(context.applicationContext, AppDatabase::class.java, "mofe")
                         .allowMainThreadQueries()
                         .fallbackToDestructiveMigration()
                         .build()

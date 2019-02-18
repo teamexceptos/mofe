@@ -72,6 +72,10 @@ class CircularProgressBar : View {
         invalidate()
     }
 
+    fun getAngle: Int{
+        return angle.toInt()
+    }
+
     fun setProgressWidth(width: Float) {
         progressPaint.strokeWidth = width
         backgroundPaint.strokeWidth = width

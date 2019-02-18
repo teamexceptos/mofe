@@ -6,10 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.mofe.R
+import com.mofe.activities.home_activity
 import com.mofe.database.AppDatabase
 import com.mofe.database.entities.Items
 import com.mofe.utils.ItemTouchHelperAdapter
 import com.mofe.utils.NumberAmountFormat
+import com.mofe.utils.SharedprefManager
+import com.mofe.utils.SharedprefManager.amount
+import com.mofe.utils.SharedprefManager.spentamount
+import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.row_mofe.view.*
 import java.util.*
 
@@ -17,20 +22,33 @@ import java.util.*
  * Created by ${cosmic} on 2/11/19.
  */
 
-class ItemsAdapter(val mContext: Context, var mArrayList: ArrayList<Items>) : RecyclerView.Adapter<ItemsAdapter.ViewHolder>(), ItemTouchHelperAdapter {
+class ItemsAdapter(val mContext: Context,
+                   var mArrayList: ArrayList<Items>,
+                   val mActivity: home_activity,
+                   var isAdapterforGotten: Boolean) : RecyclerView.Adapter<ItemsAdapter.ViewHolder>(), ItemTouchHelperAdapter {
 
+    val CUSTOM_PREF_NAME = "amount_data"
 
     val TAG: String = ItemsAdapter::class.java.simpleName
-    val Catedatabase = AppDatabase.getInstance(context = mContext).ItemsDao().all
+    val boolGotten : Boolean = isAdapterforGotten
+
+    val Catedatabase = AppDatabase.getInstance(context = mContext).ItemsDao()
+    val Prefs = SharedprefManager.customPreference(mContext, CUSTOM_PREF_NAME);
 
     override fun getItemCount(): Int {
         return mArrayList.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val mView = LayoutInflater.from(mContext).inflate(R.layout.row_mofe, parent, false)
 
-        return ViewHolder(mView)
+        if(isAdapterforGotten == false) {
+            val mView = LayoutInflater.from(mContext).inflate(R.layout.row_mofe, parent, false)
+            return ViewHolder(mView)
+
+        } else {
+            val mView = LayoutInflater.from(mContext).inflate(R.layout.row_mofe_gotten, parent, false)
+            return ViewHolder(mView)
+        }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -45,6 +63,18 @@ class ItemsAdapter(val mContext: Context, var mArrayList: ArrayList<Items>) : Re
         holder.itemduedate.text = mArrayList[position].itemDueDate
         holder.itemdateadded.text = mArrayList[position].itemDateAdded
 
+        holder.itemgottencheck.setOnClickListener {
+            gottenItems(position = position)
+        }
+
+        holder.itemdelete.setOnClickListener {
+            deleteItem(position = position)
+        }
+
+        holder.itempriceedit.setOnClickListener {
+            mActivity.dialogUpdate(context = mContext, forItem = true, position = position)
+        }
+
     }
 
     /**
@@ -55,34 +85,30 @@ class ItemsAdapter(val mContext: Context, var mArrayList: ArrayList<Items>) : Re
         notifyDataSetChanged()
     }
 
-    /**
-     * Set new data list
-     * */
-    fun setList(mArrayList: ArrayList<Items>) {
-        this.mArrayList = mArrayList
-        notifyDataSetChanged()
-    }
+    fun deleteItem(position: Int) {
 
-    fun getList(): ArrayList<Items> {
-        return this.mArrayList
-    }
+        Prefs.amount = Prefs.amount + mArrayList[position].itemPrice!!
 
-    fun deleteTask(position: Int) {
-//        dbManager.delete(mArrayList[position].uid)
+        if(!isAdapterforGotten)
+            mActivity.amt_reduction.setText(NumberAmountFormat(Prefs.amount))
+
+        Catedatabase.delete(mArrayList[position])
+
         mArrayList.removeAt(position)
         notifyItemRemoved(position)
         notifyItemRangeChanged(position, mArrayList.size)
     }
 
-    fun finishTask(position: Int) {
-//        dbManager.finishTask(mArrayList[position].uid)
-        mArrayList.removeAt(position)
-        notifyItemRemoved(position)
-        notifyItemRangeChanged(position, mArrayList.size)
-    }
+    fun gottenItems(position: Int) {
 
-    fun unFinishTask(position: Int) {
-//        dbManager.unFinishTask(mArrayList[position].uid)
+        Prefs.spentamount = Prefs.spentamount + mArrayList[position].itemPrice!!
+        val items: Items = Catedatabase.findItemById(mArrayList[position].itemUid)[0]
+        items.itemGotten = "yes"
+
+        Catedatabase.update(items)
+
+        mActivity.cp_bar.setProgress(Prefs.spentamount.toFloat())
+
         mArrayList.removeAt(position)
         notifyItemRemoved(position)
         notifyItemRangeChanged(position, mArrayList.size)
@@ -106,11 +132,15 @@ class ItemsAdapter(val mContext: Context, var mArrayList: ArrayList<Items>) : Re
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         val viewColorTag = view.viewColorTag!!
-
         var itemname = view.item_mofe
         var itemprice = view.item_price
         var itemcate = view.item_cate
         var itemduedate = view.item_date_toget
         var itemdateadded = view.input_date
+        val optionsItemClick = view.item_options_lyt
+        val itemgottencheck = view.item_check_gotten
+        val itempriceedit = view.item_price_edit
+        val itemdelete = view.item_delete
+
     }
 }

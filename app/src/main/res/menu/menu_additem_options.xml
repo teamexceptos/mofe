@@ -3,8 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.toget.activities.home_activity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_search"
         android:orderInCategory="100"
-        android:title="More"
+        android:title="Search"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_spanding_stats"
+        android:orderInCategory="100"
+        android:title="Spendings"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_about"
+        android:orderInCategory="100"
+        android:title="About"
+        app:showAsAction="never" />
+
 </menu>

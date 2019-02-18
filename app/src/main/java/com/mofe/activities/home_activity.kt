@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
 import android.widget.EditText
 import android.widget.RelativeLayout
 import com.mofe.R
@@ -44,20 +45,27 @@ open class home_activity : AppCompatActivity() {
     lateinit var rView: RelativeLayout
     var mArrayList: ArrayList<Items> = ArrayList()
     lateinit var database : AppDatabase
+    lateinit var asyncroomdb : AppDatabase
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
+
+        noStatusBar()
+
         setContentView(R.layout.activity_home)
 
         val Prefs = customPreference(this, CUSTOM_PREF_NAME);
-        database = AppDatabase.getInstance(context = this@home_activity)
 
         doAsync {
 
-            val items = database.ItemsDao().loadAllByGotten("no")
+            asyncroomdb = AppDatabase.getInstance(context = this@home_activity)
+            database = AppDatabase.getInstance(context = this@home_activity)
+
+            val items = asyncroomdb.ItemsDao().loadAllByGotten("no")
+
             sortingforItmes(items)
+
             mArrayList = items as ArrayList<Items>
             rvMofe = mofe_rv
             rView = no_items_added
@@ -100,10 +108,16 @@ open class home_activity : AppCompatActivity() {
         cp_bar.run {
             setRounded(true)
             setMaxProgress(Prefs.init_amount.toFloat())
-            setProgressColor(context.getColor(R.color.lime_progress_100))
+
+            if (getAngle() <= 80){
+                setProgressColor(context.getColor(R.color.lime_progress_100))
+            } else {
+                context.getColor(R.color.red)
+            }
+
             setProgressBackgroundColor(context.getColor(R.color.colorWhite))
-            setProgressWidth(16.0F)
-            setProgress(Prefs.spentamount)
+            setProgressWidth(19.0F)
+            setProgress(Prefs.spentamount.toFloat())
         }
     }
 
@@ -117,17 +131,20 @@ open class home_activity : AppCompatActivity() {
 
         rvMofe.addOnItemTouchListener(RecyclerItemClickListener(baseContext, rvMofe, object : RecyclerItemClickListener.OnItemClickListener {
 
-                    override fun onItemClick(view: View, position: Int) { }
-
-                    override fun onLongItemClick(view: View, position: Int) {
+                    override fun onItemClick(view: View, position: Int) {
 
                         val holder: ItemsAdapter.ViewHolder = ItemsAdapter.ViewHolder(view)
 
-                        if (holder.optionsItemClick.visibility == View.GONE){
+                        if (holder.optionsItemClick.visibility == View.GONE) {
                             holder.optionsItemClick.visibility = View.VISIBLE
+
                         } else {
                             holder.optionsItemClick.visibility = View.GONE
                         }
+                    }
+
+                    override fun onLongItemClick(view: View, position: Int) {
+
                     }
                 })
         )
@@ -168,8 +185,13 @@ open class home_activity : AppCompatActivity() {
                         if(init_amt_input.text.toString() != "update amount"){
 
                             val new_update = Prefs.init_amount + amt_update.toInt()
-                            init_amt_input.setText(NumberAmountFormat(new_update))
+                            init_amt_input.text = NumberAmountFormat(new_update)
+
                             Prefs.init_amount = new_update
+                            Prefs.amount = Prefs.amount + amt_update.toInt()
+                            amt_reduction.text = NumberAmountFormat(Prefs.amount)
+
+                            cp_bar.setMaxProgress(new_update.toFloat())
                         }
 
                         else {
@@ -189,16 +211,18 @@ open class home_activity : AppCompatActivity() {
 
                         if (position != null) {
 
-                            val items: Items = database.ItemsDao().findItemById(position)!!
+                            val items: Items = database.ItemsDao().findItemById(mArrayList[position].itemUid)[0]
                             Prefs.amount = Prefs.amount + items.itemPrice!!
 
                             items.itemPrice = amt_update.toInt()
                             Prefs.amount = Prefs.amount - items.itemPrice!!
-                            amt_reduction.setText(Prefs.amount.toString())
+                            amt_reduction.text = Prefs.amount.toString()
+
                             database.ItemsDao().update(items)
                         }
                     }
                     else {
+
                         toast("Enter amount to change")
                     }
 
@@ -212,5 +236,9 @@ open class home_activity : AppCompatActivity() {
         }
 
         alertDialog.show()
+    }
+
+    fun noStatusBar() {
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
     }
 }

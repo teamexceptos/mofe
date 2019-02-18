@@ -5,6 +5,7 @@
     <color name="colorAccent">#979add</color>
     <color name="colorWhite">#ffffff</color>
     <color name="lime_progress_100">#aeb941</color>
+    <color name="red">#f93e2d</color>
 
     <array name="random_color">
         <item name="red_400" type="color">#e84e40</item>
