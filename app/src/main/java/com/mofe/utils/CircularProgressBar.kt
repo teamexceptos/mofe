@@ -72,7 +72,7 @@ class CircularProgressBar : View {
         invalidate()
     }
 
-    fun getAngle: Int{
+    fun getAngle(): Int{
         return angle.toInt()
     }
 

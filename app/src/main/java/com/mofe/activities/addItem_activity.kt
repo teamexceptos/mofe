@@ -305,7 +305,7 @@ class addItem_activity : home_activity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        val id = item!!.itemId
+//        val id = item!!.itemId
 //        when (id) {
 //            R.id.action_done -> {
 //                addItems()

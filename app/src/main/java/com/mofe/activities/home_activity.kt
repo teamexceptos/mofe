@@ -173,7 +173,7 @@ open class home_activity : AppCompatActivity() {
             val button_positive = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
             val button_negative = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
 
-            button_positive.setTextColor(context.resources.getColor(R.color.colorPrimary))
+            button_positive.setTextColor(context.getColor(R.color.colorPrimary))
             button_positive.setOnClickListener {
 
                 val amt_update: String = input.text.toString().trim()
@@ -191,7 +191,9 @@ open class home_activity : AppCompatActivity() {
                             Prefs.amount = Prefs.amount + amt_update.toInt()
                             amt_reduction.text = NumberAmountFormat(Prefs.amount)
 
-                            cp_bar.setMaxProgress(new_update.toFloat())
+                            cp_bar.run {
+                                setMaxProgress(new_update.toFloat())
+                            }
                         }
 
                         else {
