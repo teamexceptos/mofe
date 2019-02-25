@@ -40,6 +40,7 @@ open class home_activity : AppCompatActivity() {
 
     private var mAdapter: ItemsAdapter? = null
     val context: Context = this
+    var perc : Int = 0
 
     lateinit var rvMofe: RecyclerView
     lateinit var rView: RelativeLayout
@@ -108,17 +109,20 @@ open class home_activity : AppCompatActivity() {
         cp_bar.run {
             setRounded(true)
             setMaxProgress(Prefs.init_amount.toFloat())
+            setProgressWidth(19.0F)
+            setProgress(Prefs.spentamount.toFloat())
+            perc = getProgressPercentage()
+            actual_money_spent.text = "$perc%"
 
-            if (getAngle() <= 80){
-                setProgressColor(context.getColor(R.color.lime_progress_100))
+            if(perc >= 80){
+                setProgressColor(context.getColor(R.color.red))
             } else {
-                context.getColor(R.color.red)
+                setProgressColor(context.getColor(R.color.lime_progress_100))
             }
 
             setProgressBackgroundColor(context.getColor(R.color.colorWhite))
-            setProgressWidth(19.0F)
-            setProgress(Prefs.spentamount.toFloat())
         }
+
     }
 
     private fun initializeMoferv() {
@@ -191,9 +195,6 @@ open class home_activity : AppCompatActivity() {
                             Prefs.amount = Prefs.amount + amt_update.toInt()
                             amt_reduction.text = NumberAmountFormat(Prefs.amount)
 
-                            cp_bar.run {
-                                setMaxProgress(new_update.toFloat())
-                            }
                         }
 
                         else {

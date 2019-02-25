@@ -305,12 +305,18 @@ class addItem_activity : home_activity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-//        val id = item!!.itemId
-//        when (id) {
-//            R.id.action_done -> {
-//                addItems()
-//            }
-//        }
+        val id = item!!.itemId
+
+        when (id) {
+
+            R.id.action_spanding_stats -> {
+                startActivity(Intent(mActivity, stats_activity::class.java))
+            }
+
+            R.id.action_about -> {
+
+            }
+        }
 
         return super.onOptionsItemSelected(item)
     }

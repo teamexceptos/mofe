@@ -18,11 +18,12 @@ class RoomApplication : Application() {
 
                 val cate: MutableList<Cate> = mutableListOf()
 
-                listOf("Food", "Wears", "Gadgets", "Snacks", "Books", "School materials", "Toys", "for friends", "Tickets").forEach {
+                listOf("Food", "Wears", "Gadgets", "Snacks", "Books", "School", "Fun", "Friends", "Tickets").forEach {
 
                     val cates = Cate(it)
                     cate.add(cates)
                 }
+
                 database.CateDao().insertAll(cates = cate)
             }
         }

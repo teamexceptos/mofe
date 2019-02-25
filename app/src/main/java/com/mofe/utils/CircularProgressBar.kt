@@ -29,7 +29,7 @@ class CircularProgressBar : View {
     private var maxProgress = 0f
 
     private var diameter = 0f
-    private var angle = 0f
+    var angle = 0f
 
     override fun onDraw(canvas: Canvas) {
         drawCircle(maxAngle, canvas, backgroundPaint)
@@ -72,8 +72,8 @@ class CircularProgressBar : View {
         invalidate()
     }
 
-    fun getAngle(): Int{
-        return angle.toInt()
+    fun getProgressPercentage(): Int {
+        return (angle / 360 * 100).toInt()
     }
 
     fun setProgressWidth(width: Float) {

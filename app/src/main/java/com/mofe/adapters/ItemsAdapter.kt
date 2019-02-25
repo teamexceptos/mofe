@@ -87,12 +87,14 @@ class ItemsAdapter(val mContext: Context,
 
     fun deleteItem(position: Int) {
 
-        Prefs.amount = Prefs.amount + mArrayList[position].itemPrice!!
-
-        if(!isAdapterforGotten)
+        if (mArrayList[position].itemGotten == "no"){
+            Prefs.amount = Prefs.amount + mArrayList[position].itemPrice!!
             mActivity.amt_reduction.setText(NumberAmountFormat(Prefs.amount))
+            Catedatabase.delete(mArrayList[position])
 
-        Catedatabase.delete(mArrayList[position])
+        } else {
+            Catedatabase.delete(mArrayList[position])
+        }
 
         mArrayList.removeAt(position)
         notifyItemRemoved(position)
@@ -108,6 +110,7 @@ class ItemsAdapter(val mContext: Context,
         Catedatabase.update(items)
 
         mActivity.cp_bar.setProgress(Prefs.spentamount.toFloat())
+        mActivity.actual_money_spent.text = mActivity.cp_bar.getProgressPercentage().toString() + "%"
 
         mArrayList.removeAt(position)
         notifyItemRemoved(position)
