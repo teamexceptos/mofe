@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.formatter.PercentFormatter
 import com.mofe.R
 import com.mofe.database.AppDatabase
 import com.mofe.database.entities.Cate
@@ -15,6 +16,7 @@ import com.mofe.database.entities.Items
 import kotlinx.android.synthetic.main.activity_stats_views.*
 import org.jetbrains.anko.selector
 import org.jetbrains.anko.toast
+
 
 /**
  * Created by ${cosmic} on 2/19/19.
@@ -117,8 +119,14 @@ class stats_activity : home_activity() {
             }
         }
 
-        renderPieChart_ng_Cate()
-        renderPieChart_g_Cate()
+        if (count_list_cate_1.size != 0 && count_list_cate_2.size != 0) {
+
+            renderPieChart_ng_Cate()
+            renderPieChart_g_Cate()
+
+            pie_chart_view.visibility = View.VISIBLE
+
+        }
 
     }
 
@@ -252,7 +260,10 @@ class stats_activity : home_activity() {
         val pieDataSet = PieDataSet(yVentries, "")
         pieDataSet.setSliceSpace(3f)
         pieDataSet.setSelectionShift(5f)
+        pieDataSet.setValueFormatter(PercentFormatter())
         pieDataSet.setColors(androidColors.slice(0..count_list_cate_1.size))
+        pieDataSet.setValueTextColor(Color.BLACK);
+        pieDataSet.valueTextSize = 10f
 
         val pieData = PieData(cate_notgotten_item_counts.distinct(), pieDataSet)
 
@@ -285,7 +296,10 @@ class stats_activity : home_activity() {
         val pieDataSet = PieDataSet(yVentries, "")
         pieDataSet.setSliceSpace(3f)
         pieDataSet.setSelectionShift(5f)
+        pieDataSet.setValueFormatter(PercentFormatter())
         pieDataSet.setColors(androidColors.slice(0..count_list_cate_2.size))
+        pieDataSet.setValueTextColor(Color.BLACK);
+        pieDataSet.valueTextSize = 10f
 
         val pieData = PieData(cate_gotten_item_counts.distinct(), pieDataSet)
 
@@ -294,7 +308,7 @@ class stats_activity : home_activity() {
 
         pie_g_cate_chart.data = pieData
         pie_g_cate_chart.setUsePercentValues(true)
-        pie_g_cate_chart.setCenterTextSize(7f)
+        pie_g_cate_chart.setCenterTextSize(5f)
         pie_g_cate_chart.setCenterTextColor(Color.BLACK)
         pie_g_cate_chart.setHoleColor(Color.WHITE)
         pie_g_cate_chart.setDescription("categories of items gotten")
