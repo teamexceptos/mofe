@@ -15,7 +15,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="3dp"
         android:background="@android:color/white"
         android:gravity="center"
         android:orientation="horizontal">
@@ -64,7 +64,7 @@
                 android:id="@+id/item_mofe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="6dp"
                 android:textColor="@android:color/black"
                 android:textSize="19sp" />
 
@@ -78,7 +78,7 @@
                 android:id="@+id/item_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="6dp"
                 android:textColor="@android:color/black"
                 android:textSize="17sp" />
 
@@ -86,7 +86,8 @@
                 android:id="@+id/textView3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Due date" />
+                android:text="Due date"
+                android:textSize="11sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -98,7 +99,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@android:color/black"
+                    android:textSize="11sp" />
 
                 <TextView
                     android:id="@+id/item_cate"
@@ -109,58 +111,6 @@
                     android:layout_weight="1"
                     android:textAlignment="viewEnd"
                     android:textSize="16sp" />
-            </LinearLayout>
-
-            <View
-                android:id="@+id/view"
-                android:layout_width="45dp"
-                android:layout_height="1dp"
-                android:layout_gravity="center"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
-                android:background="@android:color/holo_blue_bright" />
-
-            <LinearLayout
-                android:id="@+id/item_options_lyt"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="4dp"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:visibility="gone">
-
-                <ImageView
-                    android:id="@+id/item_check_gotten"
-                    android:layout_width="match_parent"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:padding="5dp"
-                    android:tint="@color/colorAccent"
-                    app:srcCompat="@drawable/ic_check_black_24dp" />
-
-                <ImageView
-                    android:id="@+id/item_price_edit"
-                    android:layout_width="match_parent"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:padding="5dp"
-                    android:tint="@color/colorAccent"
-                    app:srcCompat="@drawable/ic_edit_black_foritem_24dp" />
-
-                <ImageView
-                    android:id="@+id/item_delete"
-                    android:layout_width="match_parent"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:padding="5dp"
-                    android:tint="@color/colorAccent"
-                    app:srcCompat="@drawable/ic_delete_black_24dp" />
             </LinearLayout>
 
         </LinearLayout>

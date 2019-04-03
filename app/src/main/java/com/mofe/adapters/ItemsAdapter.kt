@@ -13,6 +13,7 @@ import com.mofe.utils.ItemTouchHelperAdapter
 import com.mofe.utils.NumberAmountFormat
 import com.mofe.utils.SharedprefManager
 import com.mofe.utils.SharedprefManager.amount
+import com.mofe.utils.SharedprefManager.init_amount
 import com.mofe.utils.SharedprefManager.spentamount
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.row_mofe.view.*
@@ -28,9 +29,6 @@ class ItemsAdapter(val mContext: Context,
                    var isAdapterforGotten: Boolean) : RecyclerView.Adapter<ItemsAdapter.ViewHolder>(), ItemTouchHelperAdapter {
 
     val CUSTOM_PREF_NAME = "amount_data"
-
-    val TAG: String = ItemsAdapter::class.java.simpleName
-    val boolGotten : Boolean = isAdapterforGotten
 
     val Catedatabase = AppDatabase.getInstance(context = mContext).ItemsDao()
     val Prefs = SharedprefManager.customPreference(mContext, CUSTOM_PREF_NAME);
@@ -63,18 +61,6 @@ class ItemsAdapter(val mContext: Context,
         holder.itemduedate.text = mArrayList[position].itemDueDate
         holder.itemdateadded.text = mArrayList[position].itemDateAdded
 
-        holder.itemgottencheck.setOnClickListener {
-            gottenItems(position = position)
-        }
-
-        holder.itemdelete.setOnClickListener {
-            deleteItem(position = position)
-        }
-
-        holder.itempriceedit.setOnClickListener {
-            mActivity.dialogUpdate(context = mContext, forItem = true, position = position)
-        }
-
     }
 
     /**
@@ -89,8 +75,10 @@ class ItemsAdapter(val mContext: Context,
 
         if (mArrayList[position].itemGotten == "no"){
             Prefs.amount = Prefs.amount + mArrayList[position].itemPrice!!
-            mActivity.amt_reduction.setText(NumberAmountFormat(Prefs.amount))
+            mActivity.amt_reduction.text = NumberAmountFormat(Prefs.amount)
             Catedatabase.delete(mArrayList[position])
+
+            mActivity.circularProgressBar(Prefs.init_amount, Prefs.spentamount)
 
         } else {
             Catedatabase.delete(mArrayList[position])
@@ -109,8 +97,7 @@ class ItemsAdapter(val mContext: Context,
 
         Catedatabase.update(items)
 
-        mActivity.cp_bar.setProgress(Prefs.spentamount.toFloat())
-        mActivity.actual_money_spent.text = mActivity.cp_bar.getProgressPercentage().toString() + "%"
+        mActivity.circularProgressBar(Prefs.init_amount, Prefs.spentamount)
 
         mArrayList.removeAt(position)
         notifyItemRemoved(position)
@@ -140,10 +127,5 @@ class ItemsAdapter(val mContext: Context,
         var itemcate = view.item_cate
         var itemduedate = view.item_date_toget
         var itemdateadded = view.input_date
-        val optionsItemClick = view.item_options_lyt
-        val itemgottencheck = view.item_check_gotten
-        val itempriceedit = view.item_price_edit
-        val itemdelete = view.item_delete
-
     }
 }

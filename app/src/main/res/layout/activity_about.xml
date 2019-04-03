@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="wrap_content"
+        android:layout_height="340dp"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/top_edge" />
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="256dp"
+        android:layout_height="180dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="94dp"
+        app:srcCompat="@drawable/ic_launcher_foreground" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="127dp"
+        android:text="Mofe app is simply design for management and tracking of expenses."
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="25dp"
+        android:layout_marginRight="4dp"
+        android:text="by exceptos"
+        android:textColor="@color/colorAccent"
+        android:textSize="11sp"
+        android:textStyle="bold" />
+</RelativeLayout>

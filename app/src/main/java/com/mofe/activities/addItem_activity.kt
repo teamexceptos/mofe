@@ -5,17 +5,16 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import com.mofe.R
-import com.mofe.adapters.ItemsAdapter
 import com.mofe.database.AppDatabase
 import com.mofe.database.entities.Items
-import com.mofe.utils.*
+import com.mofe.utils.SharedprefManager
 import com.mofe.utils.SharedprefManager.amount
 import com.mofe.utils.SharedprefManager.init_amount
+import com.mofe.utils.getCurrentDateTime
+import com.mofe.utils.toString
 import kotlinx.android.synthetic.main.activity_add_item.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.selector
@@ -36,7 +35,6 @@ class addItem_activity : home_activity() {
     lateinit var myCalendar: Calendar
 
     override val CUSTOM_PREF_NAME = "amount_data"
-    private var mAdapter: ItemsAdapter? = null
 
     private var inputDate = ""
     private var inputItem = ""
@@ -58,6 +56,7 @@ class addItem_activity : home_activity() {
             doAsync {
 
                 val Catedatabase = AppDatabase.getInstance(context = this@addItem_activity).CateDao().all
+                all_items = database.ItemsDao().all
 
                 val cnames: MutableList<CharSequence> = arrayListOf()
                 Catedatabase.asSequence().mapTo(cnames){
@@ -72,34 +71,6 @@ class addItem_activity : home_activity() {
             }
         }
 
-        expandings()
-
-        doAsync {
-
-            val database = AppDatabase.getInstance(context = this@addItem_activity)
-            val itemGotten = database.ItemsDao().loadAllByGotten("yes")
-
-            all_items = database.ItemsDao().all
-
-            sortingforItmes(itemGotten)
-
-            mArrayList = itemGotten as ArrayList<Items>
-
-            uiThread {
-                if(mArrayList.size == 0) {
-
-                    gotten_mofe_items_rv.visibility = View.GONE
-
-                } else {
-
-                    gotten_mofe_items_rv.visibility = View.VISIBLE
-                    mAdapter = ItemsAdapter(this@addItem_activity, mArrayList,this@addItem_activity, true)
-                    initializeMofeGottenrv()
-
-                }
-            }
-        }
-
         edtSetDate.setOnClickListener {
             dateAndTime()
             setDate()
@@ -110,52 +81,6 @@ class addItem_activity : home_activity() {
         }
     }
 
-    private fun initializeMofeGottenrv() {
-
-        rvMofe = gotten_mofe_items_rv
-        rvMofe.visibility = View.VISIBLE
-        rvMofe.setHasFixedSize(true)
-        rvMofe.layoutManager = LinearLayoutManager(this)
-        rvMofe.adapter = mAdapter
-
-        rvMofe.addOnItemTouchListener(RecyclerItemClickListener(baseContext, rvMofe, object : RecyclerItemClickListener.OnItemClickListener {
-
-                    override fun onItemClick(view: View, position: Int) {
-
-                        val holder: ItemsAdapter.ViewHolder = ItemsAdapter.ViewHolder(view)
-
-                        if (holder.optionsItemClick.visibility == View.GONE) {
-
-                            holder.optionsItemClick.visibility = View.VISIBLE
-
-                        } else {
-
-                            holder.optionsItemClick.visibility = View.GONE
-                        }
-                    }
-
-                    override fun onLongItemClick(view: View, position: Int) {
-
-                    }
-                })
-        )
-
-    }
-
-    private fun expandings(){
-
-        expand_input_layout.setOnClickListener {
-
-            if(mofe_input_layout.visibility == View.VISIBLE){
-                mofe_input_layout.visibility = View.GONE
-                expand_input_layout.setImageDrawable(mActivity.getDrawable(R.drawable.ic_expand_more_black_24dp))
-
-            } else {
-                mofe_input_layout.visibility = View.VISIBLE
-                expand_input_layout.setImageDrawable(mActivity.getDrawable(R.drawable.ic_expand_less_black_24dp))
-            }
-        }
-    }
 
     private fun addItems(){
 
@@ -314,7 +239,7 @@ class addItem_activity : home_activity() {
             }
 
             R.id.action_about -> {
-
+                startActivity(Intent(mActivity, about_activity::class.java))
             }
         }
 

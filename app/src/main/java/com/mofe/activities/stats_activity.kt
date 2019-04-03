@@ -17,7 +17,6 @@ import kotlinx.android.synthetic.main.activity_stats_views.*
 import org.jetbrains.anko.selector
 import org.jetbrains.anko.toast
 
-
 /**
  * Created by ${cosmic} on 2/19/19.
  */
@@ -89,7 +88,7 @@ class stats_activity : home_activity() {
                 val uniques_gotten: ArrayList<String> = ArrayList()
 
                 for (i in 0 until date_gotten_item_counts.distinct().size){
-                    uniques_gotten.add(date_gotten_item_counts[i] +"                "+ count_list_2[i])
+                    uniques_gotten.add(String.format("%s  -  %s", date_gotten_item_counts[i], count_list_2[i]))
 
                 }
                 selector("Items gotten", uniques_gotten.toMutableList()){ _, i ->
@@ -108,7 +107,7 @@ class stats_activity : home_activity() {
                 val uniques_gotten: ArrayList<String> = ArrayList()
 
                 for (i in 0 until date_notgotten_item_counts.distinct().size){
-                    uniques_gotten.add(date_notgotten_item_counts[i] +"                "+ count_list_1[i])
+                    uniques_gotten.add(String.format("%s  -  %s", date_notgotten_item_counts[i], count_list_1[i]))
                 }
                 selector("Items to get", uniques_gotten.toMutableList()){ _, i ->
                     toast(uniques_gotten[i])
@@ -119,7 +118,7 @@ class stats_activity : home_activity() {
             }
         }
 
-        if (count_list_cate_1.size != 0 && count_list_cate_2.size != 0) {
+        if (count_list_cate_1.size != 0 || count_list_cate_2.size != 0) {
 
             renderPieChart_ng_Cate()
             renderPieChart_g_Cate()
@@ -171,6 +170,8 @@ class stats_activity : home_activity() {
 
             val leftAxis = item_gotten_linechart.axisLeft
             leftAxis.isEnabled = true
+            leftAxis.spaceTop = 4f
+            leftAxis.spaceBottom = 4f
 
             val rightAxis = item_gotten_linechart.axisRight
             rightAxis.isEnabled = false
@@ -223,6 +224,7 @@ class stats_activity : home_activity() {
             item_mofe_linechart.axisLeft.setDrawGridLines(false)
             item_mofe_linechart.axisLeft.axisLineColor = stats_context.getColor(R.color.colorWhite)
             item_mofe_linechart.setDescription("")
+
             item_mofe_linechart.setDrawBorders(false)
             item_mofe_linechart.setDrawGridBackground(false)
 
@@ -234,6 +236,7 @@ class stats_activity : home_activity() {
 
             val xAxis = item_mofe_linechart.xAxis
             xAxis.isEnabled = true
+            xAxis.spaceBetweenLabels = 3
 
             val legend = item_mofe_linechart.legend
             legend.isEnabled = true
@@ -262,7 +265,7 @@ class stats_activity : home_activity() {
         pieDataSet.setSelectionShift(5f)
         pieDataSet.setValueFormatter(PercentFormatter())
         pieDataSet.setColors(androidColors.slice(0..count_list_cate_1.size))
-        pieDataSet.setValueTextColor(Color.BLACK);
+        pieDataSet.setValueTextColor(Color.WHITE);
         pieDataSet.valueTextSize = 10f
 
         val pieData = PieData(cate_notgotten_item_counts.distinct(), pieDataSet)
@@ -273,7 +276,7 @@ class stats_activity : home_activity() {
         pie_ng_cate_chart.data = pieData
         pie_ng_cate_chart.setUsePercentValues(true)
         pie_ng_cate_chart.setCenterTextSize(7f)
-        pie_ng_cate_chart.setCenterTextColor(Color.BLACK)
+        pie_ng_cate_chart.setCenterTextColor(Color.WHITE)
         pie_ng_cate_chart.setHoleColor(Color.WHITE)
         pie_ng_cate_chart.setDescription("categories of items to get")
 
@@ -298,7 +301,7 @@ class stats_activity : home_activity() {
         pieDataSet.setSelectionShift(5f)
         pieDataSet.setValueFormatter(PercentFormatter())
         pieDataSet.setColors(androidColors.slice(0..count_list_cate_2.size))
-        pieDataSet.setValueTextColor(Color.BLACK);
+        pieDataSet.setValueTextColor(Color.WHITE);
         pieDataSet.valueTextSize = 10f
 
         val pieData = PieData(cate_gotten_item_counts.distinct(), pieDataSet)
@@ -309,7 +312,7 @@ class stats_activity : home_activity() {
         pie_g_cate_chart.data = pieData
         pie_g_cate_chart.setUsePercentValues(true)
         pie_g_cate_chart.setCenterTextSize(5f)
-        pie_g_cate_chart.setCenterTextColor(Color.BLACK)
+        pie_g_cate_chart.setCenterTextColor(Color.WHITE)
         pie_g_cate_chart.setHoleColor(Color.WHITE)
         pie_g_cate_chart.setDescription("categories of items gotten")
 

@@ -24,56 +24,55 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:layout_marginTop="7dp"
-                android:textStyle="bold"
                 android:textAlignment="center"
                 android:textColor="@android:color/white"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/edit_amt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:padding="4dp"
                 android:layout_marginRight="4dp"
+                android:padding="4dp"
                 app:srcCompat="@drawable/ic_edit_black_24dp" />
 
             <RelativeLayout
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_gravity="center">
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center">
 
-                <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_centerInParent="true">
+            <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerInParent="true">
 
-                    <TextView
-                        android:id="@+id/actual_money_spent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="0%"
-                        android:textSize="30sp"
-                        android:textColor="@color/colorWhite"/>
+            <TextView
+            android:id="@+id/actual_money_spent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="0%"
+            android:textSize="30sp"
+            android:textColor="@color/colorWhite"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="spent"
-                        android:textSize="14sp"
-                        android:textColor="@color/colorWhite"/>
+            <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="spent"
+            android:textSize="14sp"
+            android:textColor="@color/colorWhite"/>
 
-                </LinearLayout>
+            </LinearLayout>
 
-                <com.mofe.utils.CircularProgressBar
-                    android:id="@+id/cp_bar"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center" />
-
+            <com.mofe.utils.CircularProgressBar
+            android:id="@+id/cp_bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" />
 
             </RelativeLayout>
 
@@ -93,7 +92,8 @@
                         android:layout_height="wrap_content"
                         android:text="Income"
                         android:textAlignment="center"
-                        android:textColor="@android:color/holo_blue_bright" />
+                        android:textColor="@android:color/holo_blue_bright"
+                        android:textSize="15sp" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -135,7 +135,8 @@
                         android:layout_gravity="right"
                         android:text="Reduction"
                         android:textAlignment="center"
-                        android:textColor="@android:color/holo_blue_bright" />
+                        android:textColor="@android:color/holo_blue_bright"
+                        android:textSize="15sp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -164,24 +165,108 @@
                 </LinearLayout>
 
             </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/mofe_rv"
+    <LinearLayout
+        android:id="@+id/to_get_heading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/amount_details_lyt"
-        android:visibility="gone" />
+        android:background="@color/colorWhite"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:text="Items to get"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:id="@+id/expand1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:tint="@color/colorPrimary"
+                app:srcCompat="@drawable/ic_expand_less_black_24dp" />
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/to_get_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/amount_details_lyt"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/gotten_heading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/to_get_heading"
+        android:layout_marginTop="7dp"
+        android:background="@color/colorWhite"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:text="Items gotten"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:id="@+id/expand2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:tint="@color/colorPrimary"
+                app:srcCompat="@drawable/ic_expand_less_black_24dp" />
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/gotten_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/no_items_added"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/amount_details_lyt">
+        android:layout_below="@+id/amount_details_lyt"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/textView4"
@@ -191,6 +276,7 @@
             android:text="No wants added yet"
             android:textColor="@color/colorAccent"
             android:textSize="23sp" />
+
     </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
