@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Mofe</string>
     <string name="action_settings">Settings</string>
+
+    <string name="update_income">Income is not yet updated or too low</string>
+    <string name="update_action">Update</string>
 </resources>

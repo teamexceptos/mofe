@@ -47,7 +47,9 @@ class onboarding_activity : AppCompatActivity() {
                 // last page. make button text to GOT IT
                 btnNext!!.text = "START"
                 btnSkip!!.visibility = View.GONE
+
             } else {
+
                 // still pages are left
                 btnNext!!.text = "NEXT"
                 btnSkip!!.visibility = View.VISIBLE
@@ -95,7 +97,9 @@ class onboarding_activity : AppCompatActivity() {
         viewPager!!.adapter = myViewPagerAdapter
         viewPager!!.addOnPageChangeListener(viewPagerPageChangeListener)
 
-        btnSkip!!.setOnClickListener { launchHomeScreen() }
+        btnSkip!!.setOnClickListener {
+            launchHomeScreen()
+        }
 
         btnNext!!.setOnClickListener {
             // checking for last page
@@ -104,7 +108,9 @@ class onboarding_activity : AppCompatActivity() {
             if (current < layouts!!.size) {
                 // move to next screen
                 viewPager!!.currentItem = current
+
             } else {
+
                 launchHomeScreen()
             }
         }

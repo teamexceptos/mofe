@@ -5,17 +5,21 @@ import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import com.mofe.database.daos.CateDao
+import com.mofe.database.daos.DebtorsDao
 import com.mofe.database.daos.ItemsDao
 import com.mofe.database.entities.Cate
+import com.mofe.database.entities.Debtors
 import com.mofe.database.entities.Items
 
-@Database(entities = [(Cate::class), (Items::class)], version = 5, exportSchema = false)
+@Database(entities = [(Cate::class), (Items::class), (Debtors::class)], version = 5, exportSchema = false)
 
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun CateDao(): CateDao
 
     abstract fun ItemsDao(): ItemsDao
+
+    abstract fun DebtorsDao(): DebtorsDao
 
     companion object {
 
@@ -45,5 +49,4 @@ abstract class AppDatabase : RoomDatabase() {
             return sInstance!!
         }
     }
-
 }

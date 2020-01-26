@@ -22,26 +22,79 @@
 
     <TextView
         android:id="@+id/textView14"
-        android:layout_width="230dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="127dp"
-        android:text="Mofe app is simply design for management and tracking of expenses."
+        android:layout_above="@+id/feedback_layout_vw"
+        android:layout_below="@+id/imageView7"
+        android:layout_marginTop="59dp"
+        android:layout_marginBottom="56dp"
+        android:padding="7dp"
+        android:text="Mofe app is simply designed for management and tracking of expenses."
         android:textAlignment="center"
-        android:textColor="@color/colorAccent"
-        android:textSize="17sp" />
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textView15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="25dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="7dp"
         android:layout_marginRight="4dp"
-        android:text="by exceptos"
-        android:textColor="@color/colorAccent"
-        android:textSize="11sp"
+        android:layout_marginBottom="36dp"
+        android:text="by teamexceptos"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp"
         android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/feedback_layout_vw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView15"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="12dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="7dp">
+
+        <ImageView
+            android:id="@+id/imageView18"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_margin="9dp"
+            android:src="@drawable/vd_feedback" />
+
+        <TextView
+            android:id="@+id/textView22"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="9dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/raleway_medium"
+            android:text="Feedback"
+            android:textColor="@color/colorPrimary"
+            android:textSize="19sp"
+            android:textStyle="normal|bold" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imageView8"
+        android:layout_alignBottom="@+id/imageView8"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="115dp"
+        android:layout_marginEnd="179dp"
+        android:layout_marginBottom="46dp"
+        android:text="v 1.2"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
 </RelativeLayout>

@@ -12,8 +12,9 @@
         android:id="@+id/cate_title"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:text="cate"
         android:gravity="center_vertical"
-        />
+        android:textSize="17sp"
+        android:textStyle="bold"
+        tools:text="cate" />
 
 </LinearLayout>

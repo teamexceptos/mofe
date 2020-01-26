@@ -117,16 +117,6 @@ class stats_activity : home_activity() {
                 toast("No item inputs yet")
             }
         }
-
-        if (count_list_cate_1.size != 0 || count_list_cate_2.size != 0) {
-
-            renderPieChart_ng_Cate()
-            renderPieChart_g_Cate()
-
-            pie_chart_view.visibility = View.VISIBLE
-
-        }
-
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -245,79 +235,5 @@ class stats_activity : home_activity() {
             item_mofe_linechart.animateXY(500, 300)
 
         }
-
     }
-
-    fun renderPieChart_ng_Cate() {
-
-        val yVentries = ArrayList<Entry>()
-        var x = 0
-
-        count_list_cate_1.forEach {
-            yVentries.add(Entry(it.toFloat(), x))
-            x += 1
-        }
-
-        val androidColors = context.resources.getIntArray(R.array.random_color)
-
-        val pieDataSet = PieDataSet(yVentries, "")
-        pieDataSet.setSliceSpace(3f)
-        pieDataSet.setSelectionShift(5f)
-        pieDataSet.setValueFormatter(PercentFormatter())
-        pieDataSet.setColors(androidColors.slice(0..count_list_cate_1.size))
-        pieDataSet.setValueTextColor(Color.WHITE);
-        pieDataSet.valueTextSize = 10f
-
-        val pieData = PieData(cate_notgotten_item_counts.distinct(), pieDataSet)
-
-        pie_ng_cate_chart.rotationAngle = 0f
-        pie_ng_cate_chart.isRotationEnabled = true
-
-        pie_ng_cate_chart.data = pieData
-        pie_ng_cate_chart.setUsePercentValues(true)
-        pie_ng_cate_chart.setCenterTextSize(7f)
-        pie_ng_cate_chart.setCenterTextColor(Color.WHITE)
-        pie_ng_cate_chart.setHoleColor(Color.WHITE)
-        pie_ng_cate_chart.setDescription("categories of items to get")
-
-        pie_ng_cate_chart.invalidate()
-
-    }
-
-    fun renderPieChart_g_Cate() {
-
-        val yVentries = ArrayList<Entry>()
-        var x = 0
-
-        count_list_cate_2.forEach {
-            yVentries.add(Entry(it.toFloat(), x))
-            x += 1
-        }
-
-        val androidColors = context.resources.getIntArray(R.array.random_color)
-
-        val pieDataSet = PieDataSet(yVentries, "")
-        pieDataSet.setSliceSpace(3f)
-        pieDataSet.setSelectionShift(5f)
-        pieDataSet.setValueFormatter(PercentFormatter())
-        pieDataSet.setColors(androidColors.slice(0..count_list_cate_2.size))
-        pieDataSet.setValueTextColor(Color.WHITE);
-        pieDataSet.valueTextSize = 10f
-
-        val pieData = PieData(cate_gotten_item_counts.distinct(), pieDataSet)
-
-        pie_g_cate_chart.rotationAngle = 0f
-        pie_g_cate_chart.isRotationEnabled = true
-
-        pie_g_cate_chart.data = pieData
-        pie_g_cate_chart.setUsePercentValues(true)
-        pie_g_cate_chart.setCenterTextSize(5f)
-        pie_g_cate_chart.setCenterTextColor(Color.WHITE)
-        pie_g_cate_chart.setHoleColor(Color.WHITE)
-        pie_g_cate_chart.setDescription("categories of items gotten")
-
-        pie_g_cate_chart.invalidate()
-
-    }
-
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3f51b5</color>
+    <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#979add</color>
+    <color name="colorAccent">#979ADD</color>
     <color name="colorWhite">#ffffff</color>
     <color name="lime_progress_100">#aeb941</color>
     <color name="red">#f93e2d</color>

@@ -6,6 +6,9 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textViewStyle">@style/MofeTextStyle</item>
+        <item name="android:editTextStyle">@style/MofeEditTextStyle</item>
+
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -14,7 +17,26 @@
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="MofeTextStyle" parent="android:Widget.TextView">
+        <item name="android:textColor">#ffff</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/raleway_medium</item>
+    </style>
+
+    <style name="MofeButtonStyle" parent="android:Widget.Button">
+        <item name="android:fontFamily">@font/raleway_bold</item>
+        <item name="android:textColor">#fff</item>
+        <item name="android:background">@color/colorAccent</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="MofeEditTextStyle" parent="android:Widget.EditText">
+        <item name="android:fontFamily">@font/raleway_bold</item>
+        <item name="android:textSize">21sp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:tint">@color/colorPrimary</item>
+    </style>
 
 </resources>

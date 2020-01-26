@@ -39,5 +39,4 @@ class Items constructor(@PrimaryKey @ColumnInfo(name = "item_uid") var itemUid: 
     @ColumnInfo(name = "item_is_gotten")
     var itemGotten: String? = itemisGotten
 
-
 }

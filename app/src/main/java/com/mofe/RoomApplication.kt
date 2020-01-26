@@ -18,7 +18,7 @@ class RoomApplication : Application() {
 
                 val cate: MutableList<Cate> = mutableListOf()
 
-                listOf("Food", "Wears", "Gadgets", "Snacks", "Books", "School", "Fun", "Friends", "Tickets").forEach {
+                listOf("Food", "Wears", "Gadgets", "Snacks", "Books", "School", "Fun", "Rides", "Friends", "Tickets").forEach {
 
                     val cates = Cate(it)
                     cate.add(cates)
@@ -28,5 +28,4 @@ class RoomApplication : Application() {
             }
         }
     }
-
 }

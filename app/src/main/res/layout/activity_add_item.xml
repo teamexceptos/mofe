@@ -8,7 +8,7 @@
     android:focusableInTouchMode="true"
     android:focusable="true"
     android:background="@android:color/white"
-    tools:context=".activities.addItem_activity">
+    tools:context=".activities.add_Item_activity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -26,181 +26,172 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
     </android.support.design.widget.AppBarLayout>
 
-    <ScrollView
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbarStyle="insideOverlay"
-        android:scrollbars="none">
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:text="Add your new Item and track."
+        android:textAlignment="viewEnd"
+        android:textColor="@color/colorPrimary"
+        android:textSize="21sp"
+        android:textStyle="bold" />
 
-        <LinearLayout
+    <LinearLayout
+        android:id="@+id/mofe_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_marginTop="18dp"
+            android:textColorHint="@color/colorPrimary"
+            app:hintTextAppearance="@style/MofeTextStyle">
 
-            <LinearLayout
-                android:id="@+id/mofe_input_layout"
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/edtItem"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:ems="10"
+                android:hint="Item name"
+                android:inputType="textCapSentences"
+                android:singleLine="true"
+                android:textColor="@color/colorPrimary" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="21dp"
+            android:textColorHint="@color/colorPrimary"
+            app:hintTextAppearance="@style/MofeTextStyle">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/edtItemCost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:ems="10"
+                android:hint="Cost of item"
+                android:inputType="number"
+                android:singleLine="true"
+                android:textColor="@color/colorPrimary" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="21dp"
+            android:textColorHint="@color/colorPrimary"
+            app:hintTextAppearance="@style/MofeTextStyle">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/edtSetDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_toLeftOf="@+id/imgCancelDate"
+                android:backgroundTint="@color/colorPrimary"
+                android:clickable="true"
+                android:cursorVisible="false"
+                android:drawableRight="@drawable/ic_date_range_black_24dp"
+                android:drawableTint="@color/colorAccent"
+                android:focusable="false"
+                android:hint="Due date to get"
+                android:textColor="@color/colorPrimary" />
+        </android.support.design.widget.TextInputLayout>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutDate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottomsheet_item_to_share">
+
+            <ImageView
+                android:id="@+id/imgCancelDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:src="@drawable/ic_cancel_black_24dp"
+                android:tint="@color/colorAccent"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:id="@+id/add_to_cate"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:visibility="visible">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="16dp"
-                    android:text="What I Want"
-                    android:textColor="@color/colorAccent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
-
-                <EditText
-                    android:id="@+id/edtItem"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginStart="16dp"
-                    android:backgroundTint="@color/colorPrimary"
-                    android:ems="10"
-                    android:hint="name"
-                    android:inputType="textCapSentences"
-                    android:singleLine="true"
-                    android:textColor="@color/colorPrimary"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtTaskTitle" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="15dp"
-                    android:text="Its Cost"
-                    android:textColor="@color/colorAccent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/edtItem" />
-
-                <EditText
-                    android:id="@+id/edtItemCost"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginStart="16dp"
-                    android:backgroundTint="@color/colorPrimary"
-                    android:ems="10"
-                    android:hint="cost"
-                    android:inputType="number"
-                    android:singleLine="true"
-                    android:textColor="@color/colorPrimary"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txttask" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="16dp"
-                    android:text="Date to get it"
-                    android:textColor="@color/colorAccent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/edtItemCost" />
-
-                <RelativeLayout
-                    android:id="@+id/relativeLayoutDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginStart="16dp"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/bottomsheet_item_to_share">
-
-                    <EditText
-                        android:id="@+id/edtSetDate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_toLeftOf="@+id/imgCancelDate"
-                        android:backgroundTint="@color/colorPrimary"
-                        android:clickable="true"
-                        android:cursorVisible="false"
-                        android:drawableRight="@drawable/ic_date_range_black_24dp"
-                        android:drawableTint="@color/colorAccent"
-                        android:focusable="false"
-                        android:hint="Set Date"
-                        android:textColor="@color/colorPrimary" />
-
-                    <ImageView
-                        android:id="@+id/imgCancelDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="16dp"
-                        android:src="@drawable/ic_cancel_black_24dp"
-                        android:tint="@color/colorAccent"
-                        android:visibility="gone" />
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:id="@+id/relativeLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="15dp">
-
-                    <TextView
-                        android:id="@+id/addtoCate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:text="Tap here for Categories"
-                        android:textColor="@color/colorAccent"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/showCateSelect"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="19sp" />
-
-                <ImageView
-                    android:id="@+id/item_mofe_to_add"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_marginBottom="7dp"
-                    android:layout_marginRight="15dp"
-                    android:padding="10dp"
-                    android:tint="@color/colorPrimary"
-                    app:srcCompat="@drawable/ic_check_white_24dp" />
-
-            </LinearLayout>
+                android:layout_weight="1"
+                android:background="@drawable/round_edges"
+                android:gravity="center"
+                android:padding="9dp"
+                android:text="Tap here for Categories"
+                android:textColor="@color/colorAccent"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
-    </ScrollView>
+
+        <TextView
+            android:id="@+id/showCateSelect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="19sp" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:id="@+id/item_add_action_img"
+            android:layout_marginEnd="36dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="30dp"
+            android:layout_gravity="right"
+            android:tint="@color/colorPrimary"
+            android:src= "@drawable/ic_check_white_24dp"
+            android:layout_marginRight="36dp"
+            app:backgroundTint="#fff"/>
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -50,10 +50,10 @@
             android:layout_marginTop="50dp"
             android:lineSpacingExtra="2sp"
             android:padding="15dp"
-            android:text="Make items you want and already gotten get arranged and easy to input for your expense tracking and management."
-            android:textAlignment="center"
-            android:textColor="@color/colorAccent"
-            android:textSize="14sp" />
+            android:text="Save item details you want, ones already gotten, and debtor details for your expense tracking and management."
+            android:textAlignment="viewEnd"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
 
     </LinearLayout>
 

@@ -4,33 +4,27 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
+import android.support.design.widget.BottomSheetBehavior
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
+import android.util.TypedValue
 import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.EditText
-import android.widget.RelativeLayout
-import com.andrefrsousa.superbottomsheet.SuperBottomSheetFragment
+import android.widget.LinearLayout
 import com.mofe.R
-import com.mofe.adapters.ItemsAdapter
 import com.mofe.database.AppDatabase
 import com.mofe.database.entities.Items
-import com.mofe.utils.*
+import com.mofe.utils.SharedprefManager
 import com.mofe.utils.SharedprefManager.amount
 import com.mofe.utils.SharedprefManager.customPreference
 import com.mofe.utils.SharedprefManager.init_amount
-import com.mofe.utils.SharedprefManager.lastdate
 import com.mofe.utils.SharedprefManager.spentamount
-import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.item_bottomsheet_details.*
-import kotlinx.android.synthetic.main.item_bottomsheet_details.view.*
+import com.mofe.utils.Togetutil
+import kotlinx.android.synthetic.main.activity_new_home.*
+import kotlinx.android.synthetic.main.bottomsheet_options.*
+import kotlinx.android.synthetic.main.bottomsheet_update_amount.*
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.support.v4.toast
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 
@@ -42,132 +36,178 @@ open class home_activity : AppCompatActivity() {
 
     open val CUSTOM_PREF_NAME = "amount_data"
     open val mActivity: Activity = this@home_activity
+    val togetutil = Togetutil()
 
-    private var mAdapter: ItemsAdapter? = null
-    private var mAdapter2: ItemsAdapter? = null
+    private lateinit var bottomSheet: LinearLayout
+    private lateinit var bottomSheetBehaviour: BottomSheetBehavior<LinearLayout>
+    private var bottomSheetStateForOnBackPressed = BottomSheetBehavior.STATE_HALF_EXPANDED
     val context: Context = this
     var perc: Int = 0
     var totalAmt:Int = 0
+    var total_reduction: Int = 0
 
-    lateinit var rvMofe: RecyclerView
-    lateinit var rvMofe_2: RecyclerView
-    lateinit var rView: RelativeLayout
-    var mArrayList: ArrayList<Items> = ArrayList()
-    var mArrayList2: ArrayList<Items> = ArrayList()
+    protected lateinit var r: Resources
+    protected var px: Float = 0.toFloat()
+    protected var width: Int = 0
+    protected var height: Int = 0
+
     lateinit var database : AppDatabase
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
 
         noStatusBar()
 
-        setContentView(R.layout.activity_home)
+        setContentView(R.layout.activity_new_home)
 
-        val Prefs = customPreference(this, CUSTOM_PREF_NAME);
+        val Prefs = customPreference(this, CUSTOM_PREF_NAME)
+
+        r = resources
+        px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1f, r.displayMetrics)
+        width = r.displayMetrics.widthPixels
+        height = r.displayMetrics.heightPixels
 
         database = AppDatabase.getInstance(context = this@home_activity)
 
         doAsync {
 
             val items = database.ItemsDao().loadAllByGotten("no")
+            var item_to_get_price_Sum = 0
+
+            items.forEach {
+                item_to_get_price_Sum += it.itemPrice!!
+            }
+
             val items2 = database.ItemsDao().loadAllByGotten("yes")
+            var item_gotten_price_Sum = 0
 
-            sortingforItmes(items)
-            sortingforItmes(items2)
+            items2.forEach {
+                item_gotten_price_Sum += it.itemPrice!!
+            }
 
-            mArrayList = items as ArrayList<Items>
-            mArrayList2 = items2 as ArrayList<Items>
+            val debtors = database.DebtorsDao().all
+            var debtors_Sum = 0
 
-            rView = no_items_added
-            rvMofe = to_get_rv
-            rvMofe_2 = gotten_rv
+            debtors.forEach {
+                debtors_Sum += it.debtAmount!!
+            }
+
+            total_reduction = item_to_get_price_Sum + item_gotten_price_Sum + debtors_Sum
+            Prefs!!.spentamount = total_reduction
 
             uiThread {
 
-                if(mArrayList.size == 0 && mArrayList2.size == 0) {
+                item_to_get_count_tvw.text = items.size.toString()
+                ttl_amnt_toget.text = togetutil.NumberAmountFormat(item_to_get_price_Sum)
 
-                    rView.visibility = View.VISIBLE
+                item_gotten_count_tvw.text = items2.size.toString()
+                ttl_amnt_item_gotten.text = togetutil.NumberAmountFormat(item_gotten_price_Sum)
 
-                } else {
+                debtors_count_tvw.text = debtors.size.toString()
+                ttl_amnt_debtors.text = togetutil.NumberAmountFormat(debtors_Sum)
 
-                    mAdapter2 = ItemsAdapter(this@home_activity, mArrayList2,this@home_activity, true)
-                    mAdapter = ItemsAdapter(this@home_activity, mArrayList,this@home_activity, false)
+                amt_reduction.text = togetutil.NumberAmountFormat(Prefs.init_amount - total_reduction)
+                init_amt_input.text = togetutil.NumberAmountFormat(Prefs.init_amount)
 
-                    initializeMoferv()
-                    initializeMofeGottenrv()
-                }
-            }
+                totalAmt = Prefs.init_amount
+                Prefs.amount = Prefs.init_amount - total_reduction
 
-        }
-
-        to_get_heading.setOnClickListener {
-
-            if(to_get_rv.visibility == View.VISIBLE) {
-                to_get_rv.visibility = View.GONE
-                expand1.setImageDrawable(mActivity.getDrawable(R.drawable.ic_expand_more_black_24dp))
-
-            } else {
-                to_get_rv.visibility = View.VISIBLE
-                expand1.setImageDrawable(mActivity.getDrawable(R.drawable.ic_expand_less_black_24dp))
+                circularProgressBar(Prefs.init_amount, total_reduction)
             }
         }
 
-        gotten_heading.setOnClickListener {
+        bottomSheet = findViewById(R.id.bottomsheet_options_view_inc)
+        bottomSheetBehaviour = BottomSheetBehavior.from(bottomSheet)
 
-            if(gotten_rv.visibility == View.VISIBLE) {
-                gotten_rv.visibility = View.GONE
-                expand2.setImageDrawable(mActivity.getDrawable(R.drawable.ic_expand_more_black_24dp))
+        fab_bottomsheet_option_action.setOnClickListener {
 
-            } else {
-                gotten_rv.visibility = View.VISIBLE
-                expand2.setImageDrawable(mActivity.getDrawable(R.drawable.ic_expand_less_black_24dp))
-            }
+            bottomSheetBehaviourStateInit(bottomSheetBehaviour)
+            bottomSheetBehaviourInit(bottomSheetBehaviour)
+
+            bottomsheet_options_init()
         }
 
-        val date = getCurrentDateTime()
-        val datetoString = date.toString("EEE, d MMM yyyy")
-        Prefs.lastdate = datetoString
-        last_date_update.setText(datetoString)
+        bottomsheet_amount_to_update.text = togetutil.NumberAmountFormat(Prefs!!.init_amount)
 
-        amt_reduction.setText(NumberAmountFormat(Prefs.amount))
-        init_amt_input.setText(NumberAmountFormat(Prefs.init_amount))
-        totalAmt = Prefs.init_amount
+        update_income_layout_action.setOnClickListener {
 
-        edit_amt.setOnClickListener {
-            dialogUpdate(this);
+            bottomSheetBehaviourStateInit(bottomSheetBehaviour)
+            bottomSheetBehaviourInit(bottomSheetBehaviour)
+
+            bottomsheet_update_amount_init()
         }
 
-        add_item_toget_fab.setOnClickListener {
-            startActivity(Intent(mActivity, addItem_activity::class.java))
+        add_new_item_action.setOnClickListener {
+            startActivity(Intent(this, add_Item_activity::class.java))
             finish()
         }
 
-        circularProgressBar(Prefs.init_amount, Prefs.spentamount)
+        history_layout_action.setOnClickListener {
+            startActivity(Intent(this, history_tabs_fragment::class.java))
+            finish()
+        }
 
-    }
+        debtors_layout_action.setOnClickListener {
+            startActivity(Intent(this, add_debtor_activity::class.java))
+            finish()
+        }
 
-    fun itemPriceChange(): OnItemPriceChange {
-        return object : OnItemPriceChange {
-            override fun ItemPrice(price: Int) {
+        update_amount_action.setOnClickListener {
 
+            if (edtAmt.text!!.isEmpty()) {
+
+                toast("Please, input the amount you're adding to your inital amount")
+
+            } else {
+
+                Prefs.init_amount = Prefs.init_amount + edtAmt.text.toString().toInt()
+                Prefs.amount = Prefs.amount + edtAmt.text.toString().toInt()
+
+                init_amt_input.text = togetutil.NumberAmountFormat(Prefs.init_amount)
+                amt_reduction.text = togetutil.NumberAmountFormat(Prefs.amount)
+
+                circularProgressBar(Prefs.init_amount, Prefs.spentamount)
+
+                bottomsheet_options_init()
             }
+        }
+
+        about_layout_action.setOnClickListener {
+            startActivity(Intent(this, about_activity::class.java))
+        }
+
+        stats_layout_action.setOnClickListener {
+            startActivity(Intent(this, stats_tabs_fragment::class.java))
         }
     }
 
+    fun checkLowCashtoTrack(context: Context) {
+
+        val Prefs = customPreference(context, CUSTOM_PREF_NAME)
+
+        if(Prefs!!.amount <= (Prefs.init_amount).div(4)) {
+            Prefs.init_amount = (Prefs.init_amount).div(4)
+        }
+    }
+
+    @SuppressLint("NewApi", "SetTextI18n")
     fun circularProgressBar(amount: Int, spentamount: Int){
 
         cp_bar.run {
             setRounded(true)
             setMaxProgress(amount.toFloat())
-            setProgressWidth(21.0F)
+            setProgressWidth(36.0F)
             setProgress(spentamount.toFloat())
             perc = getProgressPercentage()
             actual_money_spent.text = "$perc%"
 
-            if(perc >= 80){
+            if(perc >= 80) {
                 setProgressColor(context.getColor(R.color.red))
+
             } else {
+
                 setProgressColor(context.getColor(R.color.lime_progress_100))
             }
 
@@ -175,271 +215,72 @@ open class home_activity : AppCompatActivity() {
         }
     }
 
-    private fun initializeMoferv() {
+    fun bottomsheet_options_init() {
 
-        rvMofe = to_get_rv
-        rvMofe.visibility = View.VISIBLE
-        rvMofe.setHasFixedSize(true)
-        rvMofe.layoutManager = LinearLayoutManager(this)
-        rvMofe.adapter = mAdapter
+        update_amount_view_inc.visibility = View.GONE
+        bottomsheet_options_view_inc.visibility = View.VISIBLE
 
-        rvMofe.addOnItemTouchListener(RecyclerItemClickListener(baseContext, rvMofe, object : RecyclerItemClickListener.OnItemClickListener {
+        bottomSheet = findViewById(R.id.bottomsheet_options_view_inc)
+        bottomSheetBehaviour = BottomSheetBehavior.from(bottomSheet)
 
-                    override fun onItemClick(view: View, position: Int) {
-
-                        val sheet = itemSheetFragment()
-                        var itemperc : Int
-
-                        itemperc = (mArrayList[position].itemPrice!!.toFloat().div(totalAmt.toFloat()) * 100).toInt()
-
-                        sheet.itemClicked().ItemClicked(mArrayList[position], itemperc, position, mAdapter!!)
-                        sheet.show(supportFragmentManager, "BottomSheetFragment")
-
-                    }
-
-                    override fun onLongItemClick(view: View, position: Int) {
-
-                    }
-                })
-        )
+        bottomSheetBehaviourStateInit(bottomSheetBehaviour)
     }
 
-    private fun initializeMofeGottenrv() {
+    fun bottomsheet_update_amount_init() {
 
-        rvMofe_2 = gotten_rv
-        rvMofe_2.visibility = View.VISIBLE
-        rvMofe_2.setHasFixedSize(true)
-        rvMofe_2.layoutManager = LinearLayoutManager(this)
-        rvMofe_2.adapter = mAdapter2
+        bottomsheet_options_view_inc.visibility = View.GONE
+        update_amount_view_inc.visibility = View.VISIBLE
 
-        rvMofe_2.addOnItemTouchListener(RecyclerItemClickListener(baseContext, rvMofe_2, object : RecyclerItemClickListener.OnItemClickListener {
+        bottomSheet = findViewById(R.id.update_amount_view_inc)
+        bottomSheetBehaviour = BottomSheetBehavior.from(bottomSheet)
 
-            override fun onItemClick(view: View, position: Int) {
-
-                val sheet = itemSheetFragment()
-                var itemperc: Int
-
-                itemperc = (mArrayList2[position].itemPrice!!.toFloat() / totalAmt.toFloat() * 100).toInt()
-
-                sheet.itemClicked().ItemClicked(mArrayList2[position], itemperc, position, mAdapter2!!)
-                sheet.show(supportFragmentManager, "BottomSheetFragment")
-
-            }
-
-            override fun onLongItemClick(view: View, position: Int) {
-
-            }
-        })
-        )
-    }
-
-    /**
-     * dialog to add category
-     * */
-    @SuppressLint("ResourceAsColor")
-    fun dialogUpdate(context: Context) {
-
-        val lytInf = LayoutInflater.from(context)
-        val promptsView = lytInf.inflate(R.layout.alert_dialog_update_amount, null)
-        val Prefs = customPreference(this, CUSTOM_PREF_NAME);
-
-        val alert = AlertDialog.Builder(context)
-        alert.setView(promptsView)
-
-        val input: EditText = promptsView.findViewById(R.id.edtAmt) as EditText
-        alert.setPositiveButton("Update", { _, _ -> })
-        alert.setNegativeButton("Cancle", { _, _ -> })
-
-        val alertDialog = alert.create()
-        alertDialog.setOnShowListener {
-
-            val button_positive = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            val button_negative = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-
-            button_positive.setTextColor(context.getColor(R.color.colorPrimary))
-            button_positive.setOnClickListener {
-
-                val amt_update: String = input.text.toString().trim()
-
-                if(amt_update != "") {
-
-                    val new_update = Prefs.init_amount + amt_update.toInt()
-                    init_amt_input.text = NumberAmountFormat(new_update)
-
-                    Prefs.init_amount = new_update
-                    Prefs.amount = Prefs.amount + amt_update.toInt()
-                    amt_reduction.text = NumberAmountFormat(Prefs.amount)
-
-                    circularProgressBar(Prefs.init_amount, Prefs.spentamount)
-
-                    val sheet = itemSheetFragment()
-                    sheet.activity!!.finish()
-
-                    alertDialog.dismiss()
-                }
-
-                else { toast("Enter Amount to update or add") }
-
-                alertDialog.dismiss()
-            }
-
-            button_negative.setOnClickListener {
-                alertDialog.dismiss()
-            }
-        }
-
-        alertDialog.show()
+        bottomSheetBehaviourInit(bottomSheetBehaviour)
     }
 
     fun noStatusBar() {
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
     }
 
-}
+    fun bottomSheetBehaviourInit(bottomSheetBehaviour: BottomSheetBehavior<LinearLayout>){
 
-class itemSheetFragment: SuperBottomSheetFragment() {
+        bottomSheetBehaviour.isFitToContents = true
 
-    lateinit var items : Items
-    private var mAdapter: ItemsAdapter? = null
-    var itemperc : Int = 0
-    var position : Int = 0
-    var mItemSheetFragment : itemSheetFragment = this@itemSheetFragment
+        bottomSheetBehaviour.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
 
-    fun itemClicked(): OnItemGotten<Items> {
-        return object : OnItemGotten<Items> {
-            override fun ItemClicked(obj: Items, perc: Int, index: Int, adapter: ItemsAdapter) {
-                items = obj
-                this@itemSheetFragment.itemperc = perc
-                position = index
-                mAdapter = adapter
-            }
-        }
-    }
+            override fun onSlide(p0: View, p1: Float) {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        return inflater.inflate(R.layout.item_bottomsheet_details, container, false)
+                when (p1) {
 
-    }
+                    1f -> {
+                        if (bottomSheetBehaviour.state == BottomSheetBehavior.STATE_COLLAPSED || bottomSheetBehaviour.peekHeight.toFloat() == 70 * px){
+                            bottomSheetBehaviour.state = BottomSheetBehavior.STATE_EXPANDED
+                        }
+                    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        view.bottemsheet_item_name.text = items.itemName
-        view.bottemsheet_item_cate.text = items.itemCate
-        view.bottomsheet_item_date.text = items.itemDueDate
-        view.bottomsheet_item_price.text = NumberAmountFormat(items.itemPrice!!)
-        view.bottomsheet_item_perc.text = "$itemperc%"
-        view.bottomsheet_perc_textdetail.text = " will be spent"
-
-        if(items.itemGotten == "yes"){
-            view.bottomsheet_item_check_gotten.visibility = View.GONE
-            view.bottomsheet_item_price_edit.visibility = View.GONE
-            view.bottomsheet_perc_textdetail.text = "was spent"
-        }
-
-        view.bottomsheet_item_check_gotten.setOnClickListener {
-            mItemSheetFragment.dismiss()
-            mItemSheetFragment.isCancelable = true
-            mAdapter!!.gottenItems(position) }
-
-        view.bottomsheet_item_price_edit.setOnClickListener {
-            dialogUpdate(position = position)
-            mAdapter!!.notifyDataSetChanged()}
-
-        view.bottomsheet_item_delete.setOnClickListener {
-            mItemSheetFragment.dismiss()
-            mItemSheetFragment.isCancelable = true
-            mAdapter!!.deleteItem(position) }
-
-        view.bottomsheet_item_to_share.setOnClickListener {
-            mItemSheetFragment.dismiss()
-            mItemSheetFragment.isCancelable = true
-            shareItemtoget(items)
-            }
-    }
-
-    fun shareItemtoget(items: Items) {
-        val sendIntent = Intent()
-        sendIntent.action = Intent.ACTION_SEND
-
-        if(items.itemGotten == "no"){
-            sendIntent.putExtra(Intent.EXTRA_TEXT, "Sharing this item, " + items.itemName +
-                    ". I want to get on or before " + items.itemDueDate +
-                    "\nI manage my spendings through Mofe app, try it out")
-
-        } else {
-            sendIntent.putExtra(Intent.EXTRA_TEXT, "Sharing this item, " + items.itemName +
-                    " I have gotten already on " + items.itemDueDate +
-                    "\nI manage my spendings through Mofe app, try it out")
-        }
-
-        sendIntent.type = "text/plain"
-        startActivity(Intent.createChooser(sendIntent, "Send to..."))
-    }
-
-    @SuppressLint("ResourceAsColor")
-    fun dialogUpdate(position: Int?) {
-
-        val lytInf = LayoutInflater.from(mItemSheetFragment.requireContext())
-        val promptsView = lytInf.inflate(R.layout.alert_dialog_update_amount, null)
-        val Prefs = customPreference(mItemSheetFragment.requireContext(), "amount_data");
-
-        val alert = AlertDialog.Builder(mItemSheetFragment.requireContext())
-        alert.setView(promptsView)
-
-        val input: EditText = promptsView.findViewById(R.id.edtAmt) as EditText
-        alert.setPositiveButton("Update", { _, _ -> })
-        alert.setNegativeButton("Cancle", { _, _ -> })
-
-        val alertDialog = alert.create()
-        alertDialog.setOnShowListener {
-
-            val button_positive = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            val button_negative = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-
-            button_positive.setOnClickListener {
-
-                val amt_update: String = input.text.toString().trim()
-
-                if (position != null) {
-
-                    val database : AppDatabase = AppDatabase.getInstance(context = mItemSheetFragment.requireContext())
-
-                    val items: Items = database.ItemsDao().findItemById(items.itemUid)[0]
-                    Prefs.amount = Prefs.amount + items.itemPrice!!
-
-                    items.itemPrice = amt_update.toInt()
-                    Prefs.amount = Prefs.amount - items.itemPrice!!
-                    bottomsheet_item_price.text = NumberAmountFormat(items.itemPrice!!)
-//                    home_activity().itemPriceChange().ItemPrice(Prefs.amount)
-                    database.ItemsDao().update(items)
+                    -1f -> {
+                        if (bottomSheetBehaviour.state == BottomSheetBehavior.STATE_EXPANDED ){
+                            bottomSheetBehaviour.state = BottomSheetBehavior.PEEK_HEIGHT_AUTO
+                        }
+                    }
                 }
-
-                else {
-
-                    toast("Enter amount to change")
-                }
-
-                alertDialog.dismiss()
             }
 
-            button_negative.setOnClickListener {
-                alertDialog.dismiss()
+            override fun onStateChanged(p0: View, p1: Int) {
+                bottomSheetStateForOnBackPressed = p1
             }
-        }
-
-        alertDialog.show()
+        })
     }
 
+    fun bottomSheetBehaviourStateInit(bottomSheetBehaviour: BottomSheetBehavior<LinearLayout>){
+
+        if (bottomSheetBehaviour.state == BottomSheetBehavior.STATE_EXPANDED) {
+
+            bottomSheetBehaviour.state = BottomSheetBehavior.STATE_COLLAPSED
+
+        } else if (bottomSheetBehaviour.state == BottomSheetBehavior.STATE_COLLAPSED) {
+
+            bottomSheetBehaviour.state = BottomSheetBehavior.STATE_EXPANDED
+        }
+    }
 }
 
-interface OnItemGotten<T> {
-
-    fun ItemClicked(obj: Items, perc: Int, index: Int, adapter: ItemsAdapter)
-}
-
-interface OnItemPriceChange {
-
-    fun ItemPrice(price: Int)
-}

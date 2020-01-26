@@ -26,10 +26,10 @@
             android:layout_marginTop="50dp"
             android:lineSpacingExtra="2sp"
             android:padding="10dp"
-            android:text="View all charts and progress of all your expenses and take needful, smart and intelligent actions towards your spending."
-            android:textAlignment="center"
-            android:textColor="@color/colorAccent"
-            android:textSize="14sp" />
+            android:text="View all progress and stats of all your expenses and take needful, smart and intelligent actions towards your spending."
+            android:textAlignment="viewEnd"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
 
     </LinearLayout>
 

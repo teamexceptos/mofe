@@ -123,25 +123,7 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <com.github.mikephil.charting.charts.PieChart
-                            android:id="@+id/pie_ng_cate_chart"
-                            android:layout_width="300dp"
-                            android:layout_height="300dp"
-                            android:layout_margin="5dp">
-
-                        </com.github.mikephil.charting.charts.PieChart>
-
-                        <com.github.mikephil.charting.charts.PieChart
-                            android:id="@+id/pie_g_cate_chart"
-                            android:layout_width="300dp"
-                            android:layout_height="300dp"
-                            android:layout_margin="5dp">
-
-                        </com.github.mikephil.charting.charts.PieChart>
-
-                    </LinearLayout>
+                        android:orientation="horizontal"/>
                 </HorizontalScrollView>
 
             </LinearLayout>
